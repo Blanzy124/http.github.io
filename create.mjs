@@ -1,19 +1,23 @@
 import fs from 'node:fs';
 import { folder } from './index.mjs';
 import path from 'node:path';
+import { comentCreationStart } from './index.mjs';
+import { report } from 'node:process';
 
-export function createFolderUser(userName){
 
 
-} 
 
-export function createComent (coment) {
-  const dateNameFile = path.join(folder, `${new Date().toLocaleString()}.txt`)
-  fs.writeFile(dateNameFile, `C:${coment}`, 'utf8', (err) => {
-    if (err) {
-      console.error('No se pudo crear el comentario')
-      return
-    }
+
+
+export function createComent(userComment, userFolder) {
+  const dateNameFileComent = path.join(userFolder, `${new Date().toLocaleString().replace(/[/:,]/g, '-')}.txt`)
+  fs.writeFile(dateNameFileComent, `${userComment}`, 'utf8', (err) => {
+   if (err) {
+     console.error('No se pudo crear el comentario')
+     console.log(`pleace try again`)
+     comentCreationStart()
+     return
+   }
     console.log('Creacion del comentario exitosa')
   })
 }
