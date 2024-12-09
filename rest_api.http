@@ -1,0 +1,11 @@
+GET http://localhost:1235
+
+###
+POST http://localhost:1235/addcoment
+Content-Type: application/json
+
+
+{
+  "name": "Vilma",
+  "coment": "Sin Samuel me muero"
+}
