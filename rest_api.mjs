@@ -9,7 +9,7 @@ import { error } from 'node:console';
 const app = express()
 
 const comentsPath = path.join('.', 'users', 'coments.json') 
-const PORT = 1235
+
 app.use(express.json());
 
 const ACEPTED_WEBS = [
@@ -93,6 +93,8 @@ app.patch('/coments/:id', (req, res) => {
 
 
 }) 
+
+const PORT = process.env.PORT ?? 1235
 
 app.listen(PORT, () => {
  console.log(`escuchando a http://localhost:${PORT}`)
