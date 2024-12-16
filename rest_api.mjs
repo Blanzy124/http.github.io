@@ -92,8 +92,8 @@ app.patch('/coments/:id', (req, res) => {
 
 }) 
 
-const PORT = process.env.PORT ?? 3000
+const PORT = process.env.PORT ?? 1235
 
 app.listen(PORT, '0.0.0.0', () => {
- console.log(`escuchando a http://152.67.231.147:${PORT}/coments`)
+ console.log(`escuchando a http://localhost:${PORT}`)
 })
