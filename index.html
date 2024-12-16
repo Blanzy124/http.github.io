@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Tries</title>
+</head>
+ <script type="module">
+  fetch('http://localhost:1235/coments?name=Daniela')
+  .then(res => res.json())
+  .then(coments => {
+   const html = coments.map(coment => {
+    return `<article data-id="${coment.id}">
+           <h2>${coment.name}</h2>
+           <p>${coment.coment}</p>
+           <span>${coment.age}</span>
+           </article>
+          `
+   }).join('')
+   document.querySelector('main').innerHTML = html
+  })
+ </script>
+<body>
+  <main>
+   
+  </main>
+</body>
+</html>

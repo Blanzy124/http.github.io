@@ -1,5 +1,0 @@
-GET http://localhost:1234/coments
-
-###
-POST http://localhost:1234/newComment
-

@@ -2,12 +2,26 @@
 GET http://localhost:1235/coments
 
 ###
-GET http://localhost:1235/coments/lolololo
+GET http://localhost:1235/coments/0d3a63d4-48b3-44ba-8dd5-540bdc7571ce
 
 ###
-GET http://localhost:1235/coments?name=samuel
+GET http://localhost:1235/coments?name=vilma
 
-###
-POST http://localhost:1235/addcoment
+### Crear un comentario
+POST http://localhost:1235/coments
+Content-Type: application/json
 
+{
+  "coment": "te amo mi amor",
+  "name": "Samuel",
+  "age": 19
+}
+ 
+### modificar
+PATCH  http://localhost:1235/coments/0d3a63d4-48b3-44ba-8dd5-540bdc7571ce
+Content-Type: application/json
 
+{
+  "coment": "Samuel es todo lo que necesito para vivir y no pude merecer otro mejor, lo amo, lo adoro",
+  "name": "Vilma"
+}
