@@ -5,23 +5,21 @@ import fs from 'node:fs';
 import coments from './users/coments.json'  assert { type: 'json' };
 import { comentSchema } from './schemas/comentsSchemas.mjs';
 import { comentSchemmaPartial } from './schemas/comentsSchemas.mjs';
-import { error } from 'node:console';
 const app = express()
 
 const comentsPath = path.join('.', 'users', 'coments.json') 
 
 app.use(express.json());
 
-const ACEPTED_WEBS = [
- "http://localhost:1235/coments",
- "https://blanzy124.github.io"
-]
+//const ACEPTED_WEBS = [
+// "http://localhost:1235/coments",
+// "https://blanzy124.github.io"
+//]
 app.get('/coments', (req, res ) => {
- const originWeb = req.header('origin')
- if(ACEPTED_WEBS.includes(originWeb)){
-  res.header('Access-Control-Allow-Origin', originWeb)  
-
- }
+ res.header('Access-Control-Allow-Origin', '*')  
+ //const originWeb = req.header('origin')
+ //if(ACEPTED_WEBS.includes(originWeb)){
+ //}
 
  const { name } = req.query
  const { age } = req.query
