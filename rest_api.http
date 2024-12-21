@@ -2,7 +2,7 @@
 GET http://localhost:1235/coments
 
 ###
-GET http://localhost:1235/coments/0d3a63d4-48b3-44ba-8dd5-540bdc7571ce
+GET http://localhost:1235/coments/c2ae8fe8-2edc-4863-9a43-6efa0b481e1e
 
 ###
 GET http://localhost:1235/coments?name=vilma
@@ -12,16 +12,19 @@ POST http://localhost:1235/coments
 Content-Type: application/json
 
 {
-  "coment": "te amo mi amor",
-  "name": "Samuel",
-  "age": 19
+  "coment": "Tengo al mejor yerno del mundo, no pudo haber otro mejor para mi hijaaaaaaa",
+  "name": "Adelina, la mejor suegraaaaaa",
+  "age": 45
 }
  
 ### modificar
-PATCH  http://localhost:1235/coments/0d3a63d4-48b3-44ba-8dd5-540bdc7571ce
+PATCH  http://localhost:1235/coments/c2ae8fe8-2edc-4863-9a43-6efa0b481e1e
 Content-Type: application/json
 
 {
-  "coment": "Samuel es todo lo que necesito para vivir y no pude merecer otro mejor, lo amo, lo adoro",
-  "name": "Vilma"
+  "coment": "ya quiero que mi hija y mi yerno se casen",
+  "name": "Adelina"
 }
+
+###
+DELETE http://localhost:1235/coments/5d07d6d0-9079-473b-ae52-11dca3135921
