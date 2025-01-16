@@ -6,7 +6,7 @@ const config = {
   host: 'localhost',
   user: 'root',
   port: 3306,
-  password: '',
+  password: 'Mgee2005?',
   database: 'comentsDB',
 }
 
