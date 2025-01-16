@@ -1,6 +1,7 @@
 import express from 'express';
 import { comentSchema, comentSchemmaPartial } from '../schemas/comentsSchemas.mjs';
-import { comentModel } from '../models/coment.mjs';
+import { comentModel } from '../models/mysql/coments.mjs';
+//import { comentModel } from '../models/local_files/coment.mjs';
 
 export class comentController {
  static async getALL (req, res ) {
@@ -23,6 +24,7 @@ export class comentController {
   const coment = await comentModel.postComent({ result: result.data })
   res.json(coment).status(201)
  }
+
  static async comentPatch (req, res) {
   const restultP = comentSchemmaPartial(req.body)
   if(restultP.error){ 
@@ -31,7 +33,8 @@ export class comentController {
   }])}
 
   const { id } = req.params
- const coment = await comentModel.comentPatch({ id, restultP })
+  const coment = await comentModel.comentPatch({ id, restultP })
+
  res.json(coment)
  }
  static async comentDelete (req, res) {
