@@ -9,7 +9,7 @@ app.use(corsMiddleware())
 app.use('/coments', comentsRouter)
 
 
-const PORT = process.env.PORT ?? 1235
+const PORT = 1235
 
 app.listen(PORT, '0.0.0.0', () => {
  console.log(`escuchando a http://localhost:${PORT}`)
