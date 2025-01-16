@@ -1,6 +1,6 @@
 import express from 'express';
 import { comentSchema, comentSchemmaPartial } from '../schemas/comentsSchemas.mjs';
-import { comentModel } from '../models/mysql/coments.mjs';
+import { comentModel } from '../models/local_files/coment.mjs';
 //import { comentModel } from '../models/local_files/coment.mjs';
 
 export class comentController {
