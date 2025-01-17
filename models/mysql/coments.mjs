@@ -6,10 +6,10 @@ const config = {
   host: 'localhost',
   user: 'root',
   port: 3306,
-  password: 'Mgee2005?',
-  database: 'comentsDB',
+  password: '',
+  database: 'ComentsDB',
 }
-
+//Mgee2005?
 const conection = await mysql.createConnection(config)
 export class comentModel {
  static async getALL ({ name, age }) {

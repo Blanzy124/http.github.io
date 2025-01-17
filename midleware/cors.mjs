@@ -1,8 +1,6 @@
 import cors from 'cors'
 
 const ACEPTED_WEBS = [
- "http://localhost:1235/coments",
- "https://blanzy124.github.io",
  '*'
 ]
 
