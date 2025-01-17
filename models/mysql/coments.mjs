@@ -7,7 +7,7 @@ const config = {
   user: 'root',
   port: 3306,
   password: 'Mgee2005?',
-  database: 'ComentsDB',
+  database: 'comentsDB',
 }
 const conection = await mysql.createConnection(config)
 export class comentModel {
