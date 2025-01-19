@@ -13,8 +13,8 @@ POST http://localhost:1235/coments
 Content-Type: application/json
 
 {
-  "coment": "Mi yerno es el mejor",
-  "name": "Alvaro",
+  "coment": "Mi yerno es el mejor del mundo mundial",
+  "name": "Alvaro Montoyaaaaaaa",
   "age": 47
 }
  

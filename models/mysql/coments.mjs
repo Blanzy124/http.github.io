@@ -9,18 +9,19 @@ const config = {
   password: 'Mgee2005?',
   database: 'comentsDB',
 }
+//Mgee2005?
 const conection = await mysql.createConnection(config)
 export class comentModel {
  static async getALL ({ name, age }) {
   if(name){
    const [coment] = await conection.query(
-    `select coment, name, age from comentsdb.coments where name = '${name}';`
+    `select coment, name, age from comentsdcomentsDB.coments where name = '${name}';`
    )
    return coment
   }
   if(age){
    const [coment] = await conection.query(
-    `select coment, name, age from comentsdb.coments where age = ${age};`
+    `select coment, name, age from comentsdcomentsDB.coments where age = ${age};`
    )
    return coment
   }
@@ -41,7 +42,7 @@ export class comentModel {
     ...result
    }
   let [coment] = await conection.query(
-   `insert into comentsdb.coments (name, coment, age) 
+   `insert into comentsdcomentsDB.coments (name, coment, age) 
     values ('${newComent.name}', '${newComent.coment}', ${newComent.age});`
   )
   if (coment.affectedRows >= 1) {
