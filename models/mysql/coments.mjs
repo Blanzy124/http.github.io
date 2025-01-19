@@ -15,13 +15,13 @@ export class comentModel {
  static async getALL ({ name, age }) {
   if(name){
    const [coment] = await conection.query(
-    `select coment, name, age from comentsdcomentsDB.coments where name = '${name}';`
+    `select coment, name, age from comentsDB.coments where name = '${name}';`
    )
    return coment
   }
   if(age){
    const [coment] = await conection.query(
-    `select coment, name, age from comentsdcomentsDB.coments where age = ${age};`
+    `select coment, name, age from comentsDB.coments where age = ${age};`
    )
    return coment
   }
@@ -42,7 +42,7 @@ export class comentModel {
     ...result
    }
   let [coment] = await conection.query(
-   `insert into comentsdcomentsDB.coments (name, coment, age) 
+   `insert into comentsd.coments (name, coment, age) 
     values ('${newComent.name}', '${newComent.coment}', ${newComent.age});`
   )
   if (coment.affectedRows >= 1) {
