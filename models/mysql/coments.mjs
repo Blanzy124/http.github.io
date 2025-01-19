@@ -42,7 +42,7 @@ export class comentModel {
     ...result
    }
   let [coment] = await conection.query(
-   `insert into comentsd.coments (name, coment, age) 
+   `insert into comentsDB.coments (name, coment, age) 
     values ('${newComent.name}', '${newComent.coment}', ${newComent.age});`
   )
   if (coment.affectedRows >= 1) {
