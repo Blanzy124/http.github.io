@@ -2,6 +2,7 @@ import express from 'express';
 //import { corsMiddleware } from './midleware/cors.mjs';
 import { comentsRouter } from './routers/comentsRouter.mjs';
 import { raizRouter } from './routers/raizRauter.mjs';
+import { usersRouter } from './routers/usersRouter.mjs';
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 });
 app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
+app.use('/users', usersRouter);
 
 
 const PORT = 1235

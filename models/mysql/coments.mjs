@@ -37,10 +37,8 @@ export class comentModel {
  return coment
  }
  static async postComent ({ result }) {
- const newComent = {
-    id: crypto.randomUUID(),
-    ...result
-   }
+ const newComent = result;
+
   let [coment] = await conection.query(
    `insert into comentsDB.coments (name, coment, age) 
     values ('${newComent.name}', '${newComent.coment}', ${newComent.age});`

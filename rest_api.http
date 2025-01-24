@@ -1,8 +1,9 @@
 
-GET http://localhost:1235/coments
+GET http://localhost:1235/users
 
 ###
-GET http://localhost:1235/coments?name=Alvaro
+GET http://localhost:1235/users?name=SamuelMedinaBlandon&userPassword=mgee2005
+
 
 ###
 GET http://localhost:1235/coments/3af92cda-c335-11ef-b0f3-a8a15965679f
