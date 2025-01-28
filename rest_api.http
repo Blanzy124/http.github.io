@@ -1,12 +1,12 @@
 
-GET http://localhost:1235/users
+GET http://localhost:1235/coments
 
 ###
 GET http://localhost:1235/users?name=SamuelMedinaBlandon&userPassword=mgee2005
 
 
 ###
-GET http://localhost:1235/coments/3af92cda-c335-11ef-b0f3-a8a15965679f
+GET http://localhost:1235/coments/32ea913f-d64b-11ef-bfa0-a8a15965679f
 
 
 ### Crear un comentario
@@ -14,9 +14,9 @@ POST http://localhost:1235/coments
 Content-Type: application/json
 
 {
-  "coment": "Mi yerno es el mejor del mundo mundial",
-  "name": "Alvaro Montoyaaaaaaa",
-  "age": 47
+  "coment": "Mi nieto favorito",
+  "name": "Don Gaspar",
+  "age": 73
 }
  
 ### modificar

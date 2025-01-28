@@ -10,9 +10,24 @@ const config = {
   database: 'comentsDB',
 }
 //Mgee2005?
-const conection = await mysql.createConnection(config)
+let conection;
+
+async function verifyConection(){
+  try{
+  if(!conection){
+    conection = await mysql.createConnection(config)
+    return 
+  }
+}catch(err){
+  conection = null;
+  console.error('error en la coneccion', err)
+}
+return conection
+}
+verifyConection()
 export class comentModel {
  static async getALL ({ name, age }) {
+  await verifyConection();
   if(name){
    const [coment] = await conection.query(
     `select coment, name, age from comentsDB.coments where name = '${name}';`
@@ -31,12 +46,14 @@ export class comentModel {
   return coment
  }
  static async getByID ({ id }) {
+  await verifyConection();
  const [coment] = await conection.query(
   `select coment, name, age from comentsDB.coments where id = uuid_to_bin('${id}')`
  )
  return coment
  }
  static async postComent ({ result }) {
+  await verifyConection();
  const newComent = result;
 
   let [coment] = await conection.query(
@@ -54,6 +71,7 @@ export class comentModel {
  }
  
  static async comentPatch ({ id, restultP }) {
+  await verifyConection();
   if(restultP.data.name && restultP.data.coment && restultP.data.age){
     let [coment] = await conection.query(
       `update coments set name = '${restultP.data.name}', coment = '${restultP.data.coment}', age = '${restultP.data.age}' where id = uuid_to_bin('${id}');`
@@ -169,6 +187,7 @@ export class comentModel {
 
  }
  static async comentDelete ({ id }) {
+  await verifyConection();
   let [coment] = await conection.query(
     `delete from coments where id = uuid_to_bin('${id}')`
   )
@@ -182,3 +201,5 @@ export class comentModel {
   }
  }
 }
+
+
