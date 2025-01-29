@@ -2,25 +2,36 @@ import express from 'express';
 import crypto from 'node:crypto';
 import mysql from 'mysql2/promise'; 
 
-const config = {
-  host: 'localhost',
-  user: 'root',
-  port: 3306,
-  password: 'Mgee2005?',
-  database: 'comentsDB',
-}
+const pool = mysql.createPool({
+  host: "localhost",      
+  user: "root",           
+  password: "",  
+  database: "comentsDB",  
+  port: 3306,             
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true, 
+  keepAliveInitialDelay: 10000
+});
 //Mgee2005?
 let conection;
 
 async function verifyConection(){
   try{
   if(!conection){
-    conection = await mysql.createConnection(config)
+    conection = await pool.getConnection();
     return 
   }
 }catch(err){
-  conection = null;
-  console.error('error en la coneccion', err)
+  if(!conection){
+    conection = await pool.getConnection();
+    return 
+  }
+  else{
+    conection = null;
+    console.error('error en la coneccion', err)
+  }
 }
 return conection
 }

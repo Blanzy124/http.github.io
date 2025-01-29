@@ -1,24 +1,42 @@
 import mysql from 'mysql2/promise'; 
 
-const config = {
-  host: 'localhost',
-  user: 'root',
-  port: 3306,
-  password: ' Mgee2005?',
-  database: 'comentsDB',
-}
+//const config = {
+//  host: 'localhost',
+//  user: 'root',
+//  port: 3306,
+//  password: '',
+//  database: 'comentsDB',
+//}
+//Mgee2005?
+
+const pool = mysql.createPool({
+  host: "localhost",      
+  user: "root",           
+  password: "",  
+  database: "comentsDB",  
+  port: 3306,             
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 //Mgee2005?
 let conection;
 
 async function verifyConection(){
   try{
   if(!conection){
-    conection = await mysql.createConnection(config)
+    conection = await pool.getConnection();
     return 
   }
 }catch(err){
-  conection = null;
-  console.error('error en la coneccion', err)
+  if(!conection){
+    conection = await pool.getConnection();
+    return 
+  }
+  else{
+    conection = null;
+    console.error('error en la coneccion', err)
+  }
 }
 return conection
 }
