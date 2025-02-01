@@ -11,34 +11,39 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  enableKeepAlive: true, 
-  keepAliveInitialDelay: 10000
+  enableKeepAlive: false, 
+  keepAliveInitialDelay: 1
 });
 //Mgee2005?
 let conection;
 
-async function verifyConection(){
-  try{
-  if(!conection){
-    conection = await pool.getConnection();
-    return 
+async function verifyConection(retryCount = 3) {
+  try {
+    if (!conection || conection.connection._closing) {
+      console.log(conection, 'if 1');
+      conection = await pool.getConnection();
+      console.log('Connection established');
+    }
+  } catch (err) {
+    console.error('Connection error', err);
+    if (retryCount > 0) {
+      console.log('Retrying connection...');
+      await new Promise(res => setTimeout(res, 1000)); // Espera 1 segundo antes de reintentar
+      return await verifyConection(retryCount - 1);
+    } else {
+      console.error('Failed to establish connection after retries');
+      conection = null;
+    }
   }
-}catch(err){
-  if(!conection){
-    conection = await pool.getConnection();
-    return 
-  }
-  else{
-    conection = null;
-    console.error('error en la coneccion', err)
-  }
+  return conection;
 }
-return conection
-}
-verifyConection()
+//verifyConection()
 export class comentModel {
  static async getALL ({ name, age }) {
   await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
   if(name){
    const [coment] = await conection.query(
     `select coment, name, age from comentsDB.coments where name = '${name}';`
@@ -52,12 +57,16 @@ export class comentModel {
    return coment
   }
   const [ coment ] = await conection.query(
-   'select bin_to_uuid(id), coment, name, age from coments;'
+    'select bin_to_uuid(id), coment, name, age from coments;'
   )
+  console.log(conection, "conection log test")
   return coment
  }
  static async getByID ({ id }) {
   await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
  const [coment] = await conection.query(
   `select coment, name, age from comentsDB.coments where id = uuid_to_bin('${id}')`
  )
@@ -65,6 +74,9 @@ export class comentModel {
  }
  static async postComent ({ result }) {
   await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
  const newComent = result;
 
   let [coment] = await conection.query(
@@ -83,6 +95,9 @@ export class comentModel {
  
  static async comentPatch ({ id, restultP }) {
   await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
   if(restultP.data.name && restultP.data.coment && restultP.data.age){
     let [coment] = await conection.query(
       `update coments set name = '${restultP.data.name}', coment = '${restultP.data.coment}', age = '${restultP.data.age}' where id = uuid_to_bin('${id}');`
@@ -199,6 +214,9 @@ export class comentModel {
  }
  static async comentDelete ({ id }) {
   await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
   let [coment] = await conection.query(
     `delete from coments where id = uuid_to_bin('${id}')`
   )
