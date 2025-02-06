@@ -1,4 +1,5 @@
 import mysql from 'mysql2/promise'; 
+import { date } from 'zod';
 
 //const config = {
 //  host: 'localhost',
@@ -44,35 +45,30 @@ async function verifyConection(retryCount = 3) {
   }
   return conection;
 }
-export class userModel {
- static async getUser ({ name, userPassword }) {
+
+export class cookiesModel {
+ static async setCookie ({ userNameCookie }){
   await verifyConection();
   if (!conection) {
     throw new Error('No se pudo establecer la conexión con la base de datos');
   }
-  if(name && userPassword){
-   var [user] = await conection.query(
-    `select name, userStatus from comentsDB.users where name = '${name}' and userPassword = '${userPassword}';`
+  try{
+   const cookieDate = new Date();
+   let [ cookie ]  = await conection.query(
+    `insert into comentsDB.cookies (userNameCookie, cookieDate)
+     values ('${userNameCookie.userNameCookie}', '${cookieDate}');`
    )
-   if(user.length === 0){
-     user  = { "message": "User do not exit, wrong user name or password" }
-    return user
+   if(cookie.affectedRows > 0){
+    [ cookie ] = await conection.query(
+     `select bin_to_uuid(cookieId) from comentsDB.cookies where cookieDate = '${cookieDate}';`
+    )
+    //console.log(cookie[0]["bin_to_uuid(cookieId)"])
+    return cookie
    }
-   return user
+  }catch(err){
+   let cookie = { "message": "coment error, maybe cookie name do not match an user name"}
+   return cookie
   }
+  
  }
-} 
-
-//
-//async function config () {
-//  if (!connection || connection.connection.state === 'disconnected') {
-//    connection = await mysql.createConnection({
-//      host: 'localhost',
-//      user: 'root',
-//      port: 3306,
-//      password: '',
-//      database: 'comentsDB',
-//    });
-//  }
-//  return connection;
-//}
+}

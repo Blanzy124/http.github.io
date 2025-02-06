@@ -1,5 +1,5 @@
 
-GET http://localhost:1235/coments
+GET https://localhost:1235/coments
 
 ###
 GET http://localhost:1235/users?name=SamuelMedinaBlandon&userPassword=mgee2005
@@ -10,13 +10,11 @@ GET http://localhost:1235/coments/32ea913f-d64b-11ef-bfa0-a8a15965679f
 
 
 ### Crear un comentario
-POST http://localhost:1235/coments
+POST http://localhost:1235/setCookie
 Content-Type: application/json
 
 {
-  "coment": "Mi nieto favorito",
-  "name": "Don Gaspar",
-  "age": 73
+  "userNameCookie": "Michael"
 }
  
 ### modificar

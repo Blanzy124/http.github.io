@@ -77,8 +77,8 @@ export class comentModel {
   if (!conection) {
     throw new Error('No se pudo establecer la conexión con la base de datos');
   }
+  
  const newComent = result;
-
   let [coment] = await conection.query(
    `insert into comentsDB.coments (name, coment, age) 
     values ('${newComent.name}', '${newComent.coment}', ${newComent.age});`
