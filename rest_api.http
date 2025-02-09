@@ -1,5 +1,5 @@
 
-GET https://localhost:1235/coments
+GET https://localhost:8443/setcookie/6d02205d-e6a2-11ef-a026-a8a15965679f
 
 ###
 GET http://localhost:1235/users?name=SamuelMedinaBlandon&userPassword=mgee2005
@@ -10,7 +10,7 @@ GET http://localhost:1235/coments/32ea913f-d64b-11ef-bfa0-a8a15965679f
 
 
 ### Crear un comentario
-POST http://localhost:1235/setCookie
+POST http://localhost:8443/setCookie
 Content-Type: application/json
 
 {

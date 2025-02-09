@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cookieParser())
 //corsMiddleware();
 app.use((req, res, next) => {
- const allowedOrigins = ['http://127.0.0.1:3000', 'https://blanzynetwork.com'];
+ const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443/','https://blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com'];
  const origin = req.headers.origin;
  if (allowedOrigins.includes(origin)) {
    res.header('Access-Control-Allow-Origin', origin);
@@ -27,14 +27,13 @@ app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
 app.use('/users', usersRouter);
 app.use('/setcookie', setCookieRouter)
-
 const options = {
   key: fs.readFileSync('./pems/apikey.pem'),
   cert: fs.readFileSync('./pems/apicert.pem')
 };
 const server = https.createServer(options, app);
 
-const PORT = 1235;
+const PORT = 8443;
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor API HTTPS corriendo en todas las interfaces y http://localhost:${PORT}`);
