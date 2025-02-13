@@ -7,6 +7,7 @@ import { comentsRouter } from './routers/comentsRouter.mjs';
 import { raizRouter } from './routers/raizRauter.mjs';
 import { usersRouter } from './routers/usersRouter.mjs';
 import { setCookieRouter } from './routers/cookiesRouter.mjs';
+import { blangymRouter } from './routers/blangymRouter.mjs';
 const app = express()
 
 app.use(express.json());
@@ -27,6 +28,9 @@ app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
 app.use('/users', usersRouter);
 app.use('/setcookie', setCookieRouter)
+app.use('/blangym', blangymRouter)
+
+
 const options = {
   key: fs.readFileSync('./pems/apikey.pem'),
   cert: fs.readFileSync('./pems/apicert.pem')
@@ -36,7 +40,7 @@ const server = https.createServer(options, app);
 const PORT = 8443;
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor API HTTPS corriendo en todas las interfaces y http://localhost:${PORT}`);
+  console.log(`Servidor API HTTPS corriendo en todas las interfaces y https://localhost:${PORT}`);
 });
 
 //app.listen(PORT, '0.0.0.0', () => {

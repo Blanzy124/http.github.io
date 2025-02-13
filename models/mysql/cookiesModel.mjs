@@ -1,21 +1,8 @@
 import mysql from 'mysql2/promise'; 
-
+import { pool } from '../../configConecctionDB.mjs';
 
 let conection;
 async function verifyConection(retryCount = 3) {
-  //Mgee2005?
-  const pool = mysql.createPool({
-    host: "localhost",      
-    user: "root",           
-    password: "Mgee2005?",  
-    database: "comentsDB",  
-    port: 3306,             
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    enableKeepAlive: true, 
-    keepAliveInitialDelay: 10000
-  });
    try {
      if (!conection || conection.connection._closing) {
        console.log(conection, 'if 1');
@@ -52,13 +39,13 @@ export class cookiesModel {
     [ cookie ] = await conection.query(
      `select bin_to_uuid(cookieId) from comentsDB.cookies where cookieDate = '${cookieDate}';`
     )
-    //console.log(cookie[0]["bin_to_uuid(cookieId)"])
+
     return cookie
    }
   }catch(err){
     console.error(err);
     console.log(userNameCookie, 'modelo llegada')
-   let cookie = { "message": "coment error, maybe cookie name do not match an user name"}
+   let cookie = { "message": "Cookie creation error, maybe cookie name do not match an user name"}
    return cookie
   }
  }
@@ -72,7 +59,7 @@ export class cookiesModel {
   let [cookieV] = await conection.query(`
     select userNameCookie from comentsDB.cookies where cookieId = uuid_to_bin('${cookieId}');`)
    console.log(cookieV[0].userNameCookie, 'model')
-   return cookieV = { message: "true"}
+   return cookieV = { message: "true", userName: `${cookieV[0].userNameCookie}`}
 
   }catch(error){
     let cookieV = { message: "false"}

@@ -1,21 +1,8 @@
 import mysql from 'mysql2/promise'; 
-
+import { pool } from '../../configConecctionDB.mjs';
 
 let conection;
 async function verifyConection(retryCount = 3) {
-  //Mgee2005?
-  const pool = mysql.createPool({
-    host: "localhost",      
-    user: "root",           
-    password: "Mgee2005?",  
-    database: "comentsDB",  
-    port: 3306,             
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    enableKeepAlive: true, 
-    keepAliveInitialDelay: 10000
-  });
    try {
      if (!conection || conection.connection._closing) {
        console.log(conection, 'if 1');
