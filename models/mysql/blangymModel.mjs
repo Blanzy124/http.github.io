@@ -63,7 +63,7 @@ export class blangymModel{
   }
   try{
     let [gymGet] = await conection.query(`
-      select bin_to_uuid(exerciseId), userName, date, muscleGroup, weight, reps, rest, notes from comentsDB.exercises where userName = "${userName}";
+      select bin_to_uuid(exerciseId), userName, date, muscleGroup, weight, reps, rest, notes from comentsDB.exercises where userName = "${userName}" ORDER BY STR_TO_DATE(date, '%a, %b %d, %Y') DESC;
       `)
       return gymGet
   }catch(err){
