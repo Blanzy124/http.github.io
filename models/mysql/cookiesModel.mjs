@@ -69,4 +69,24 @@ export class cookiesModel {
   }
  }
 
+ static async cookieDelete({ cookieId }){
+  await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
+  try{
+    let [deleteCookie] = await conection.query(`
+      delete from comentsDB.cookies where cookieId = uuid_to_bin('${cookieId}')
+      `)
+      if(deleteCookie.affectedRows >= 1){
+        return { message: "Cookie Has Been Delete"}
+      }
+      else{
+        return { message: "Cookie Id Do Not exist"}
+      }
+  }catch(err){
+    console.error('Delete comente error', err)
+    return { message: "Cookie Delete error"}
+  }
+ }
 }

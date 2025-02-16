@@ -2,6 +2,7 @@ import express from 'express';
 import crypto from 'node:crypto';
 import mysql from 'mysql2/promise'; 
 import { pool } from '../../configConecctionDB.mjs';
+
 let conection;
 async function verifyConection(retryCount = 3) {
    try {

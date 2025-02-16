@@ -24,4 +24,10 @@ export class cookiesController{
   console.log(cookieV, 'controller')
   res.json(cookieV)
  }
+
+ static async cookieDelete (req, res){
+  const {cookieId} = req.params;
+  const cookieDelete = await cookiesModel.cookieDelete({ cookieId })
+  res.json(cookieDelete)
+ }
 }
