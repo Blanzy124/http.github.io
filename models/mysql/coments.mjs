@@ -6,9 +6,9 @@ let conection;
 async function verifyConection(retryCount = 3) {
    try {
      if (!conection || conection.connection._closing) {
-       console.log(conection, 'if 1');
+       //console.log(conection, 'if 1');
        conection = await pool.getConnection();
-       console.log('Connection established');
+       console.log('Connection with DB established');
      }
    } catch (err) {
      console.error('Connection error', err);
@@ -44,7 +44,7 @@ export class comentModel {
   const [ coment ] = await conection.query(
     'select bin_to_uuid(id), coment, name, age from coments;'
   )
-  console.log(conection, "conection log test")
+  //console.log(conection, "conection log test")
   return coment
  }
  static async getByID ({ id }) {

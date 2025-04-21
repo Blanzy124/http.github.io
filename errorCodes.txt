@@ -1,0 +1,72 @@
+Each part of the of this code will divided by funtionality, each funtionality have 100 error codes, not all of them will be set yet.
+
+100s (coments errors){
+
+
+}
+
+
+200s (uers errors) {
+
+
+}
+
+300s (cookies errors) {
+
+
+}
+
+400s (blanGym errors) {
+
+
+}
+
+500s (setting emails) {
+ 
+ 500 = There is not a verification code active.
+ 
+ 501 = Verification code do not match.
+
+ 502 = try/cathc verification code fail (data base error, must lock at the console error logs).
+
+ 503 = There are not email or verification code (on function call).
+
+ 504 = User email not found in data base.
+
+ 505 = Error setting verification code (no data base error).
+
+ 506 = Error setting verification code (data base error, must loock at the console error logs).
+
+ 507 = There is not email (on function call).
+
+ 508 = Verification code was saved but not sent (must check emailSender config).
+
+ 509 = Error setting email status, no a serius problem.
+
+ 510 = Error settin email status in DB, try/catch problem, must check error logs.
+
+ 511 = Email status was set but email confimation was not send.
+
+ 512 =  Error code verification, not a serius problem.
+
+ 513 = Email status is false or 0 in DB, email has not benn active yet.
+
+ 514 = Email not found in DB.
+ 
+ 515 = Error checkin email status, must check error logs.
+
+ 516 = Error setting email in emails table (not serius problem).
+
+ 517 = Email is already in use.
+
+ 518 = Seting email error into DB error (must check error logs).
+
+ 519 = Missing data in request (from client).
+}
+
+600s (sending email errors){
+
+ 600 = Error sending notificaton of verification code, means email was not send.
+
+ 601 = Error sending notificaton of verification code, try/catch error, must look at error logs.
+}

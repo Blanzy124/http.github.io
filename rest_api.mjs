@@ -8,13 +8,14 @@ import { raizRouter } from './routers/raizRauter.mjs';
 import { usersRouter } from './routers/usersRouter.mjs';
 import { setCookieRouter } from './routers/cookiesRouter.mjs';
 import { blangymRouter } from './routers/blangymRouter.mjs';
+import { emailsRouter } from './routers/emailsRouter.mjs';
 const app = express()
 
 app.use(express.json());
 app.use(cookieParser())
 //corsMiddleware();
 app.use((req, res, next) => {
- const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443/','https://blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com'];
+ const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443/','https://blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com', '*'];
  const origin = req.headers.origin;
  if (allowedOrigins.includes(origin)) {
    res.header('Access-Control-Allow-Origin', origin);
@@ -25,11 +26,14 @@ app.use((req, res, next) => {
  next();
 });
 
+
+
 app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
 app.use('/users', usersRouter);
-app.use('/setcookie', setCookieRouter)
-app.use('/blangym', blangymRouter)
+app.use('/setcookie', setCookieRouter);
+app.use('/blangym', blangymRouter);
+app.use('/email', emailsRouter);
 
 
 const options = {

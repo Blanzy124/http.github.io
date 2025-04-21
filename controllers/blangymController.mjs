@@ -5,7 +5,7 @@ export class blangymController{
  static async gymPost( req, res ){
   const {userName} = req.query;
   const result = exerciseTrakerSchema(req.body);
-  console.log(result)
+  //console.log(result)
   if(!result.success){
    res.json({ error: JSON.parse(result.error.message)})
    return 
