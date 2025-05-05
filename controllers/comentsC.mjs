@@ -39,6 +39,7 @@ export class comentController {
  }
  static async comentDelete (req, res) {
   const { id } = req.params;
+
   const coment = await comentModel.comentDelete({ id })
   res.json(coment)
  }

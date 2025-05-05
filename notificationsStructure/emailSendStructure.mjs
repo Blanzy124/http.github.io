@@ -12,7 +12,7 @@ export class emailsSender {
  static async notifyVCodeWasSent ({ userEmail, verificationCode }){ //Send an email with the verification code
   const msg = {
    to: `${userEmail}`,
-   from: 'blanzynetwork@gmail.com',
+   from: 'blanzy@blanzynetwork.com',
    subject: 'Your verification code.',
    text: `Your verification code is: ${verificationCode}`,
    html: `<h1 style="color:blue;">Your verification code is: </h1><p style="font-size: 20px;"><strong>${verificationCode}</strong></p>`,
@@ -20,15 +20,15 @@ export class emailsSender {
  try{
   const [response] = await sgMail.send(msg);
   if(response.statusCode === 202){
-   return { message: "Email has been sent", ok: "true"}
+   return { message: "Email has been sent", ok: true}
   }
   else{
-   return { message: "Error sending email", errorCode: "600", ok: "false"}
+   return { message: "Error sending email", errorCode: 600, ok: false}
   }
   //console.log("Email has been send: ", response)
  }catch(err){
   console.error("Error sendinn email: ", err)
-  return { message: "Error sending email", errorCode: "601", ok: "false"}
+  return { message: "Error sending email", errorCode: 601, ok: false}
  }
  }
 
@@ -36,7 +36,7 @@ export class emailsSender {
  static async notifyEmailWasActivated ({userEmail}){
   const msg = {
    to: `${userEmail}`,
-   from: 'blanzynetwork@gmail.com',
+   from: 'blanzy@blanzynetwork.com',
    subject: 'Your email address is now verified.',
    text: `Your email address is now verified.`,
    html: `<h1 style="color:blue;">Your email address was verified.</h1>`,
@@ -44,16 +44,16 @@ export class emailsSender {
  try{
   const [response] = await sgMail.send(msg);
   if(response.statusCode === 202){
-   return { message: "Email has been sent", ok: "true"}
+   return { message: "Email has been sent", ok: true}
   }
   else{
-   return { message: "Error sending email", errorCode: "600", ok: "false"}
+   return { message: "Error sending email", errorCode: 600, ok: false}
   }
   //console.log("Email has been send: ", response)
  }catch(err){
   
   console.error("Error sendinn email: ", err)
-  return { message: "Error sending email", errorCode: "601", ok: "false"}
+  return { message: "Error sending email", errorCode: 601, ok: false} 
  }
  }
 

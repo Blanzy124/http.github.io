@@ -35,25 +35,29 @@ export class blangymModel{
   try{
     if(result.userName && result.date && result.muscleGroup && result.weight && result.reps && result.rest && result.notes){
      let [gymPost] = await conection.query(`
-      insert into comentsDB.exercises (userName, date, muscleGroup, weight, reps, rest, notes)
-      values ('${result.userName}', '${result.date}', '${result.muscleGroup}', '${result.weight}', '${result.reps}', '${result.rest}', '${result.notes}');
-    
-      `)
-      return gymPost = { message: `blanGym Post Success`}
+         insert into comentsDB.exercises (userName, date, muscleGroup, weight, reps, rest, notes)
+         values (?, ?, ?, ?, ?, ?, ?);`, [result.userName, result.date, result.muscleGroup, result.weight, result.reps, result.rest, result.notes])
+         if(gymPost.affectedRows > 0){
+          return { message: "Exercise post succes", ok: true}
+        }
+        else{
+         return { message: "Exercise post error", errorCode: 405, ok: false}
+        }
     }
-
     if(result.userName && result.date && result.muscleGroup && result.weight && result.reps && result.rest){
-      let [gymPost] = await conection.query(`
-       insert into comentsDB.exercises (userName, date, muscleGroup, weight, reps, rest)
-       values ('${result.userName}', '${result.date}', '${result.muscleGroup}', '${result.weight}', '${result.reps}', '${result.rest}');
-      
-       `)
-       return gymPost = { message: `blanGym Post Success`}
+        let [gymPost] = await conection.query(`
+         insert into comentsDB.exercises (userName, date, muscleGroup, weight, reps, rest)
+         values (?, ?, ?, ?, ?, ?);`, [result.userName, result.date, result.muscleGroup, result.weight, result.reps, result.rest])
+         if(gymPost.affectedRows > 0){
+           return { message: "Exercise post succes", ok: true}
+         }
+         else{
+          return { message: "Exercise post error", errorCode: 405, ok: false}
+         }
      }
   }catch(err){
-    console.log(err)
-    const gymPost = { message: `Post exercise error`, err: `${err}`}
-    return gymPost
+    console.error("Error code: 403", err)
+    return { message: "Post exercise error", errorCode: 403, ok: false}
   }
 
  }
@@ -64,13 +68,16 @@ export class blangymModel{
   }
   try{
     let [gymGet] = await conection.query(`
-      select bin_to_uuid(exerciseId), userName, date, muscleGroup, weight, reps, rest, notes from comentsDB.exercises where userName = "${userName}" ORDER BY STR_TO_DATE(date, '%a, %b %d, %Y') DESC;
-      `)
-      return gymGet
+      select bin_to_uuid(exerciseId), userName, date, muscleGroup, weight, reps, rest, notes from comentsDB.exercises where userName = ? ORDER BY STR_TO_DATE(date, '%a, %b %d, %Y') DESC;`, [userName])
+    if(gymGet.length > 0){
+      return { message: "Get exercise succes", ok: true, data: { exercises: gymGet } }
+    }
+    else{
+      return { message: "Exercises do not found", errorCode: 404, ok: false}
+    }
   }catch(err){
-    console.log(err)
-    const gymGet = { message: `Get exercise error`, err: `${err}`}
-    return gymGet
+    console.error("Error code: 402", err)
+    return { message: "Get exercise error", errorCode: 402, ok: false}
   }
  }
 
@@ -81,17 +88,16 @@ export class blangymModel{
   }
   try{
     const [gymDelete] = await conection.query(`
-      delete from comentsDB.exercises where exerciseId = uuid_to_bin('${exerciseId}');
-      `)
+      delete from comentsDB.exercises where exerciseId = uuid_to_bin(?);`, [exerciseId])
       if(gymDelete.affectedRows >= 1){
-        return { message: "Exercise Has Been Deleted"}
+        return { message: "Exercise Has Been Deleted", ok: true}
       }
       else{
-        return { message: "Exercises Do Not Exist"}
+        return { message: "Exercise do not found", errorCode: 401, ok: false}
       }
   }catch(err){
-    console.log("Error Deleting an exercise: ", err)
-    return { message: "Error Deleting The Exrcise"}
+    console.error("Error code: 400", err)
+    return { message: "Error Deleting The exercise", errorCode: 400, ok: false} 
   }
  }
 }

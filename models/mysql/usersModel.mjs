@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise'; 
+import mysql, { escape } from 'mysql2/promise'; 
 import bcrypt from "bcrypt";
 import dotenv from 'dotenv';
 import sgMail from "@sendgrid/mail";
@@ -12,7 +12,7 @@ let conection;
 async function verifyConection(retryCount = 3) {
    try {
      if (!conection || conection.connection._closing) {
-       console.log(conection, 'if 1');
+       //console.log(conection, 'if 1');
        conection = await pool.getConnection();
        console.log('Connection established');
      }
@@ -31,31 +31,41 @@ async function verifyConection(retryCount = 3) {
  }
 
 export class userModel {
- static async getUser ({ name, userPassword }) {
+ static async getUser ({ userName, userPassword }) {
   await verifyConection();
   if (!conection) {
     throw new Error('No se pudo establecer la conexión con la base de datos');
   }
-  if(name && userPassword){
-   var [user] = await conection.query(
-    `select userPassword from comentsDB.users where name = '${name}';`
-   )
-   if(user.length === 0){
-    return { "message": "User do not exit, wrong user name or password" }
-   }
-   
-  const match = await bcrypt.compare(userPassword, user[0].userPassword);
-  if(match){
-    console.log('match')
-    var [user] = await conection.query(
-      `select name, userStatus from comentsDB.users where name = '${name}';`
-     )
+  if(userName && userPassword){
+    const passMatch = await userModel.checkPassword({userName, userPassword});
 
-    return user;
+    if(passMatch.ok === true){
+      const userEmail = await emailModel.getUserEmail({ userName }) 
+      if(userEmail.ok !== true){return userEmail;}
+      else{
+        const emailStatus = await emailModel.checkEmailStatus({ userEmail: userEmail.data.userEmail });
+        if(emailStatus.ok !== true){return emailStatus} //This returns a MEO.
+        else{
+          //console.log('match')
+          const [user] = await conection.query(
+            `select name, userStatus from comentsDB.users where name = ?;`, [userName]) //XX
+           if(user.length === 0 ){
+            return { message: "User do not found", errorCode: 203, ok: false}; //XX
+           }
+           else{
+             return { message: "Get user succes", ok: true, data: { name: user[0].name, userStatus: user[0].userStatus}}; //XX
+           }
+  
+        }
+      }
+    }
+  else{
+    return passMatch;
+  }
+  
   }
   else{
-    return { message: "User do not exit, wrong user name or password" };
-  }
+    return { message: "Missing data", errorCode: 202, ok: false}; //XX
   }
  }
 
@@ -71,35 +81,76 @@ export class userModel {
   const hash = await bcrypt.hash(result.userPassword, saltRounds);
         const [createUser] = await conection.query(`
           insert into comentsDB.users (name, userPassword, userStatus, userEmail)
-          values ('${result.name}','${hash}', 'user', '${result.userEmail}');
-          `)
+          values ( ?, ?, 'user', ?);`, [result.name, hash, result.userEmail] 
+        )
           if(createUser.affectedRows > 0){
             const setEmail = await emailModel.setUserEmail( {userEmail: result.userEmail} );
-            if(setEmail.ok != "true"){
-              return setEmail //{ message: `${setEmail.message}`, errorCode: `${setEmail.errorCode}`, ok: `${setEmail.ok}`}
+            if(setEmail.ok !== true){
+              return setEmail 
             }
             else{
               const setCodeV = await emailModel.codeVerification.setCodeVerification( {userEmail: result.userEmail} );
   
-              if(setCodeV.ok != "true"){ 
-                return setCodeV //{ message: `${setCodeV.message}`, errorCode: `${setCodeV.errorCode}`, ok: `${setCodeV.ok}`};
+              if(setCodeV.ok !==  true){ 
+                return setCodeV //This returns a MEO.
               }
               else{
-                return { message: "User has been created and verification code has been sent", ok: "true"}
+                return { message: "User has been created and verification code has been sent", ok: true} //XX
               }
            }
           }
           else{
-            return { message: "Error creating new user", ok: "false"}
+            return { message: "Error creating new user", errorCode: 207, ok: false} //XX
           }
       }catch(err){
         if(err.errno == 1062){
-          return { message: "The username is already in use.", ok: "false"}
+          return { message: "The username is already in use.", errorCode: 206, ok: false} //XX
         }
         else{
-          console.error("Error creatin new user", err)
-          return { message: "Error creating new user", ok: "false"}
+          console.error("Error code: 205", err)
+          return { message: "Error creating new user", errorCode: 205, ok: false} //XX
         }
     } 
+ }
+
+ static async checkPassword( { userEmail, userName, userPassword }) { //This has 2 true
+  await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
+  try{
+    if(userEmail && userPassword){
+      var [user] = await conection.query(
+        `select userPassword from comentsDB.users where userEmail = ?;`, [userEmail]) //XX
+       if(user.length === 0){
+        return { message: "User email do not found", errorCode: 204, ok: false} //XX
+       }
+       else{
+         const match = await bcrypt.compare(userPassword, user[0].userPassword);
+        if(match){
+          return { message: "Password compared and verified", ok: true} //XX
+        }
+        else{ return { message: "Password do not match", errorCode: 201, ok: false}} //XX
+       }
+    }
+    if(userName && userPassword){
+      var [user] = await conection.query(
+        `select userPassword from comentsDB.users where name = ?;`, [userName]) //XX 
+       if(user.length === 0){
+        return { message: "User name do not found", errorCode: 210, ok: false } //XX
+       }
+       else{
+         const match = await bcrypt.compare(userPassword, user[0].userPassword);
+        if(match){
+          return { message: "Password compared and verified", ok: true} //XX
+        }
+        else{ return { message: "Password do not match", errorCode: 201, ok: false}} //XX
+       }
+    }
+    else{ return { message: "Missing data", errorCode: 202, ok: false}} //XX
+  }catch(err){
+    console.error("Error code : 209", err)
+    return { message: "Error checking password", errorCode: 209, ok: false}
+  }
  }
 } 

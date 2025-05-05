@@ -4,10 +4,10 @@ import { newUserSchema } from '../schemas/usersSchema.mjs';
 
 export class usersController {
  static async getUser (req, res ) {
-  const { name } = req.query
-  const { userPassword } = req.query
+  const { userName } = req.query;
+  const { userPassword } = req.query;
   //console.log(userPassword)
-  const user = await userModel.getUser({ name,  userPassword})
+  const user = await userModel.getUser({ userName,  userPassword })
   res.json(user)
   }
 
@@ -16,19 +16,17 @@ export class usersController {
     //console.log(req.body, "controller body")
     if(!result.success){
       //console.log(result.error.issues[0].message, 'user controller')
-      res.status(400).json({ message: `${result.error.issues[0].message}`, ok: "false"})
+      res.status(400).json({ message: result.error.issues[0].message, errorCode: 208 , ok: false})
       return
     }
     else{ 
       const createNewUser = await userModel.createNewUser({ result: result.data })
-      if(createNewUser.ok  !== "true"){
+      if(createNewUser.ok  !== true){
         res.status(400).json(createNewUser)
-        console.log("A new user has an errror")
         return
       }
       else{
         res.status(201).json(createNewUser)
-        console.log("A new user has been created")
         return
       }
     }

@@ -2,21 +2,88 @@ Each part of the of this code will divided by funtionality, each funtionality ha
 
 100s (coments errors){
 
+ 100 = Error deleting coments (catch jumped, must check error logs).
+
+ 101 = Coment id was not found (not serius problem).
+
+ 102 = Error creating new coment (catch jumped, must check error logs).
+
+ 103 = Coment creating error (not serius problem).
+
+ 104 = Error coments request (not serius problem).
+
+ 105 = Error coments request (catch jumped, must check error logs).
+
+ 106 = Age did not found in DB (not serius problem).
+
+ 107 = Name did not found in DB (coments, not serius problem).
+
+
+
+
 
 }
 
 
 200s (uers errors) {
 
+ 200 = User do not exits.
+
+ 201 = Password do not match.
+
+ 202 = Missing data.  THIS IS FOR GENERAL USE!
+
+ 203 = User do not found in DB.
+
+ 204 = User email do not found in check password (not a serius problem).
+
+ 205 = Error creating new user, DB error (must check error logs).
+
+ 206 = User name is allready in use (not a serius error).
+
+ 207 = Error creating new user (not a serius error)
+
+ 208 = Zod discrimination fail (user controller, not a serius problem).
+ 
+ 209 = Error checking password (catch jumped must check error logs).
+
+ 210 = User name do not found in check password (not a serius problem).
+
+
 
 }
 
 300s (cookies errors) {
 
+ 300 = There is not cookie active in DB.
+
+ 301 = Error cookie verification in DB (must check error logs).
+
+ 302 = Error creating cookie in DB (catch didnt jump).
+
+ 303 = Error creating cookie in DB (must look at error logs).
+
+ 304 = Cookie delete error (catch jumped, must check error logs).
+
+ 305 = Cookie id do not exist (deliting cookie request).
+
 
 }
 
 400s (blanGym errors) {
+
+ 400 = Error deleting exercise in DB (catch jumped, must check error logs).
+
+ 401 = Exercise do not found in DB (not serius problem).
+
+ 402 = Get exercise error (must check error longs).
+
+ 403 = Post exercise error (must check error logs).
+
+ 404 = Exercise do not found based on user name (not serius).
+
+ 405 = Exercise post error (not serius problem).
+
 
 
 }
@@ -51,7 +118,7 @@ Each part of the of this code will divided by funtionality, each funtionality ha
 
  513 = Email status is false or 0 in DB, email has not benn active yet.
 
- 514 = Email not found in DB.
+ 514 = {available error code}
  
  515 = Error checkin email status, must check error logs.
 
@@ -62,6 +129,10 @@ Each part of the of this code will divided by funtionality, each funtionality ha
  518 = Seting email error into DB error (must check error logs).
 
  519 = Missing data in request (from client).
+
+ 520 = Not a valid email address (controller).
+
+ 521 = The email that user is trying to insert in the DB do not match whith the principal table (users table).
 }
 
 600s (sending email errors){
