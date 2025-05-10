@@ -141,3 +141,15 @@ Each part of the of this code will divided by funtionality, each funtionality ha
 
  601 = Error sending notificaton of verification code, try/catch error, must look at error logs.
 }
+
+700s (tokens errors){
+ 700 = JWT verification fail ( not a serius problem).
+
+ 701 = JWT verification error ( catch jumped, must check error logs).
+
+ 702 = Invalid JWT (this is a static error code, could be in many pleaces arround the code).
+
+ 703 = No JWT in request.
+
+ 704 = No JTI in request (this meens theres not cookie id on request). 
+}

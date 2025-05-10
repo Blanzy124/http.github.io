@@ -56,22 +56,17 @@ export class cookiesModel {
   }
   if(cookieId){
     try{
-    let [cookieV] = await conection.query(`select userNameCookie from comentsDB.cookies where cookieId = uuid_to_bin(?);`, [cookieId]) //XX
-      if(cookieV.length === 0){
-        return { message: "There is not cookie active", errorCode: 300, ok: false} //XX
-      }
+      const [cookieV] = await conection.query(`select userNameCookie from comentsDB.cookies where cookieId = uuid_to_bin(?);`, [cookieId]) //XX
+      if(cookieV.length === 0){ return { message: "There is not cookie active", errorCode: 300, ok: false} }
+      const userEmail = await emailModel.getUserEmail({ userName: cookieV[0].userNameCookie })
+
+      if(userEmail.ok !== true){ return userEmail }
+
+      const emailStatus = await emailModel.checkEmailStatus({ userEmail: userEmail.data.userEmail })
+      if(emailStatus.ok !== true){ return emailStatus }
       else{
-        const userEmail = await emailModel.getUserEmail({ userName: cookieV[0].userNameCookie })
-        if(userEmail.ok !== true){ return userEmail }
-        else{
-          const emailStatus = await emailModel.checkEmailStatus({ userEmail: userEmail.data.userEmail })
-          if(emailStatus.ok !== true){ return emailStatus }
-          else{
-            return { message: "Cookie verifird", ok: true, data: {userName: cookieV[0].userNameCookie} } //XX
-          }
-        }
+        return { message: "Cookie verifird", ok: true, data: {userName: cookieV[0].userNameCookie, cookieId} } //XX
       }
-  
     }catch(error){
       console.error("Error code : '301'", error)
       return { message: "Error cookie verification", errorCode: 301, ok: false} //XX

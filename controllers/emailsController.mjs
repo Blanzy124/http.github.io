@@ -9,7 +9,7 @@ export class emailController {
   const { userName, userEmail, userPassword } = req.body;
   const result =  newEmailSchema( {userEmail} );
   if(!result.success){
-   res.json({ message: result.error.issues[0].message, errorCode: "520", ok: "false" })
+   res.json({ message: result.error.issues[0].message, errorCode: 520, ok: false })
    return 
   }
   else{
@@ -31,7 +31,7 @@ export class emailController {
   const { userEmail, emailStatus, userVerifyCode } = req.body;
   const result = newEmailSchema({userEmail});
   if (!result.success) {
-    res.status(400).json({ message: result.error.issues[0].message, errorCode: "520", ok: "false" });
+    res.status(400).json({ message: result.error.issues[0].message, errorCode: 520, ok: false });
    return 
  }
   const response = await emailModel.setEmailVerification({ userEmail: result.data.userEmail, emailStatus, userVerifyCode})

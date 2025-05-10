@@ -1,15 +1,25 @@
 import express from 'express';
 import { userModel } from '../models/mysql/usersModel.mjs';
 import { newUserSchema } from '../schemas/usersSchema.mjs';
-
+import { cookiesModel } from '../models/mysql/cookiesModel.mjs';
+import { tokens } from '../secure/JWTs.mjs';
 export class usersController {
  static async getUser (req, res ) {
-  const { userName } = req.query;
-  const { userPassword } = req.query;
+  const { userName } = req.body;
+  const { userPassword } = req.body;
   //console.log(userPassword)
   const user = await userModel.getUser({ userName,  userPassword })
   res.json(user)
   }
+  static async logIn (req, res ) {
+    const { userName } = req.body;
+    const { userPassword } = req.body;
+    const user = await userModel.getUser( { userName,  userPassword } )
+    if(user.ok !==true){ return user }
+    const cookie = await cookiesModel.setCookie( { userNameCookie: userName } )
+    if(cookie.ok !== true){ return cookie }
+    res.json(cookie)
+    }
 
   static async createNewUser(req, res){
     const result = newUserSchema(req.body)
@@ -21,14 +31,9 @@ export class usersController {
     }
     else{ 
       const createNewUser = await userModel.createNewUser({ result: result.data })
-      if(createNewUser.ok  !== true){
-        res.status(400).json(createNewUser)
-        return
-      }
-      else{
-        res.status(201).json(createNewUser)
-        return
-      }
+      res.json(createNewUser)
+        
+      
     }
 
   }

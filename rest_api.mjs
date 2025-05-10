@@ -9,6 +9,7 @@ import { usersRouter } from './routers/usersRouter.mjs';
 import { setCookieRouter } from './routers/cookiesRouter.mjs';
 import { blangymRouter } from './routers/blangymRouter.mjs';
 import { emailsRouter } from './routers/emailsRouter.mjs';
+import { tokensRouter } from './routers/tokensRouter.mjs';
 const app = express()
 
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
 app.use('/users', usersRouter);
 app.use('/setcookie', setCookieRouter);
+app.use('/tokens', tokensRouter)
 app.use('/blangym', blangymRouter);
 app.use('/email', emailsRouter);
 
