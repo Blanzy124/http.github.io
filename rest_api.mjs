@@ -10,24 +10,32 @@ import { setCookieRouter } from './routers/cookiesRouter.mjs';
 import { blangymRouter } from './routers/blangymRouter.mjs';
 import { emailsRouter } from './routers/emailsRouter.mjs';
 import { tokensRouter } from './routers/tokensRouter.mjs';
-const app = express()
+import { tokens } from './secure/JWTs.mjs';
 
+import { WebSokeckE } from './webSokeck/wstest.mjs';
+import { chatRouter } from './webSokeck/routers/chatRauter.mjs';
+
+
+
+import { WebSocketServer, WebSocket } from 'ws';
+
+const app = express()
 app.use(express.json());
 app.use(cookieParser())
 //corsMiddleware();
 app.use((req, res, next) => {
- const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443/','https://blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com', '*'];
- const origin = req.headers.origin;
- if (allowedOrigins.includes(origin)) {
-   res.header('Access-Control-Allow-Origin', origin);
- }
- res.header('Access-Control-Allow-Credentials', 'true');
- res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
- res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
- next();
+  const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443/','https://blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com'];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
 });
-
-
 
 app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
@@ -36,13 +44,35 @@ app.use('/setcookie', setCookieRouter);
 app.use('/tokens', tokensRouter)
 app.use('/blangym', blangymRouter);
 app.use('/email', emailsRouter);
-
-
 const options = {
   key: fs.readFileSync('./pems/apikey.pem'),
   cert: fs.readFileSync('./pems/apicert.pem')
 };
+
+
 const server = https.createServer(options, app);
+const wss = new WebSocketServer({ noServer: true });
+wss.on("connection", async (ws, req) => {
+
+  const wsV = await tokens.JWTverifyWS(req);// THIS IS LIKE A GET FUNTION, RETURN A DATA OBJECT
+  if(wsV.ok !== true){ ws.send(wsV.message); ws.close();}
+  try{
+    ws.userName = wsV.data.userName
+    ws.userStatus = wsV.data.userStatus
+  }catch(err){
+    ws.close()
+  }
+  
+
+
+  WebSokeckE.foo(ws, wss, wsV);
+
+})
+server.on('upgrade', function upgrade(req, socked, head) {
+  socked.on('error', console.error)
+  chatRouter.chatR(wss, req, socked, head);
+})
+
 
 const PORT = 8443;
 

@@ -46,14 +46,13 @@ export class userModel {
         const emailStatus = await emailModel.checkEmailStatus({ userEmail: userEmail.data.userEmail });
         if(emailStatus.ok !== true){return emailStatus} //This returns a MEO.
         else{
-          //console.log('match')
           const [user] = await conection.query(
-            `select name, userStatus from comentsDB.users where name = ?;`, [userName]) //XX
+            `select userStatus from comentsDB.users where name = ?;`, [userName]) //XX
            if(user.length === 0 ){
             return { message: "User do not found", errorCode: 203, ok: false}; //XX
            }
            else{
-             return { message: "Get user succes", ok: true, data: { name: user[0].name, userStatus: user[0].userStatus}}; //XX
+             return { message: "Get user succes", ok: true, data: { name: userEmail, userStatus: user[0].userStatus}}; //XX
            }
   
         }
@@ -112,7 +111,29 @@ export class userModel {
         }
     } 
  }
+ 
+ static async getUserStatus({ userName }){
+    await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
 
+  try{
+    const [userStatus] = await conection.query(
+    `select userStatus from comentsDB.users where name = ?;`, [userName]);
+    if(userStatus.length === 0 ){
+     return { message: "User status do not found", errorCode: 212, ok: false};
+    }
+    return { message: "Get user status succes", data: { userStatus: userStatus[0].userStatus}, ok: true}
+    }
+    catch(error){
+    console.error('Error number: 211 ', error)
+    return { message: "Error getting user status", errorCode: 211, ok: false};
+  }
+
+ }
+
+ 
  static async checkPassword( { userEmail, userName, userPassword }) { //This has 2 true
   await verifyConection();
   if (!conection) {

@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise';
 import { pool } from '../../configConecctionDB.mjs';
 import { userModel } from './usersModel.mjs';
 import { emailModel } from './emailsModel.mjs';
+import { date } from 'zod';
 
 let conection;
 async function verifyConection(retryCount = 3) {
@@ -34,11 +35,11 @@ export class cookiesModel {
   try{
    const cookieDate = new Date();
    let [ cookie ]  = await conection.query(
-    `insert into comentsDB.cookies (userNameCookie, cookieDate) values (?, ?);`, [userNameCookie, cookieDate]) //XX
+    `insert into comentsDB.cookies (userNameCookie, cookieDate) values (?, ?);`, [userNameCookie, cookieDate]) 
    if(cookie.affectedRows > 0){
     const [ cookieId ] = await conection.query(
-     `select bin_to_uuid(cookieId) from comentsDB.cookies where cookieDate = ?;`, [cookieDate]) //XX
-    return { message: "Cookie create", ok: true, data: {cookieId: cookieId[0]['bin_to_uuid(cookieId)']} } //XX
+     `select bin_to_uuid(cookieId) from comentsDB.cookies where cookieDate = ?;`, [cookieDate]) 
+    return { message: "Cookie create", ok: true, data: {cookieId: cookieId[0]['bin_to_uuid(cookieId)']} }
    }
    else{
     return { message: "Error creating cookie", errorCode: 302, ok: false} //XX
@@ -65,7 +66,7 @@ export class cookiesModel {
       const emailStatus = await emailModel.checkEmailStatus({ userEmail: userEmail.data.userEmail })
       if(emailStatus.ok !== true){ return emailStatus }
       else{
-        return { message: "Cookie verifird", ok: true, data: {userName: cookieV[0].userNameCookie, cookieId} } //XX
+        return { message: "Cookie verified", ok: true, data: {userName: cookieV[0].userNameCookie, cookieId} } //XX
       }
     }catch(error){
       console.error("Error code : '301'", error)
@@ -76,6 +77,25 @@ export class cookiesModel {
   else{
     return { message: "Missing data", errorCode: 202, ok: false}
   }
+ }
+
+ static async getNameBacedOnCookieId({ cookieId }){
+    await verifyConection();
+  if (!conection) {
+    throw new Error('No se pudo establecer la conexión con la base de datos');
+  }
+  try{
+    const [cookieV] = await conection.query(`select userNameCookie from comentsDB.cookies where cookieId = uuid_to_bin(?);`, [cookieId]);
+    
+    if(cookieV.length === 0){ return { message: "There is not cookie active", errorCode: 300, ok: false} }
+    return { message: "Cookie verified", data: { userName: cookieV[0].userNameCookie }, ok: true};
+
+  }catch(error){
+    console.error("Error code : '301'", error)
+    return { message: "Error getting user name or user status baced cookie id", errorCode: 306, ok: false} //XX
+  }
+  
+  
  }
 
  static async cookieDelete({ cookieId }){

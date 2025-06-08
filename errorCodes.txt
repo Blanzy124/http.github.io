@@ -49,6 +49,10 @@ Each part of the of this code will divided by funtionality, each funtionality ha
 
  210 = User name do not found in check password (not a serius problem).
 
+ 211 = Error getting user status from DB (catch jumped, must chech error logs).
+
+ 212 = User status do not found(not a serius problem).
+
 
 
 }
@@ -66,6 +70,8 @@ Each part of the of this code will divided by funtionality, each funtionality ha
  304 = Cookie delete error (catch jumped, must check error logs).
 
  305 = Cookie id do not exist (deliting cookie request).
+
+ 306 = Error getting user name or user status baced cookie id (catch jumped, must chech error logs).
 
 
 }
@@ -145,11 +151,15 @@ Each part of the of this code will divided by funtionality, each funtionality ha
 700s (tokens errors){
  700 = JWT verification fail ( not a serius problem).
 
- 701 = JWT verification error ( catch jumped, must check error logs).
+ 701 = JWT verification error  (means theres no JWT on the request) ( catch jumped, must check error logs).
 
  702 = Invalid JWT (this is a static error code, could be in many pleaces arround the code).
 
  703 = No JWT in request.
 
- 704 = No JTI in request (this meens theres not cookie id on request). 
+ 704 = No JWT in request (this meens theres not cookie id on request). 
+
+ 705 = No JWT in WS request.
+
+ 706 = UserStatus no admin in JWT.
 }

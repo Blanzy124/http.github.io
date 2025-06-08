@@ -7,7 +7,6 @@ let conection;
 async function verifyConection(retryCount = 3) {
    try {
      if (!conection || conection.connection._closing) {
-       console.log(conection, 'if 1');
        conection = await pool.getConnection();
        console.log('Connection established');
      }
