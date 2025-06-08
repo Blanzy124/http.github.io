@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser())
 //corsMiddleware();
 app.use((req, res, next) => {
-  const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443','https://blanzynetwork.com', 'https://www.blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com'];
+  const allowedOrigins = ['http://127.0.0.1:3000', 'http://localhost:8443','https://blanzynetwork.com', 'https://www.blanzynetwork.com', 'https://152.67.231.147', 'https://www.blanzynetwork.com', '*'];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
