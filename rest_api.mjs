@@ -1,3 +1,4 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import https from 'https';
 import fs from 'node:fs';
@@ -11,13 +12,16 @@ import { blangymRouter } from './routers/blangymRouter.mjs';
 import { emailsRouter } from './routers/emailsRouter.mjs';
 import { tokensRouter } from './routers/tokensRouter.mjs';
 import { tokens } from './secure/JWTs.mjs';
-
 import { WebSokeckE } from './webSokeck/wstest.mjs';
 import { chatRouter } from './webSokeck/routers/chatRauter.mjs';
 
-
-
 import { WebSocketServer, WebSocket } from 'ws';
+
+dotenv.config();
+const c_cert = process.env.CLOUDFLARE_CERT;
+const c_key = process.env.CLOUDFLARE_KEY;
+
+
 
 const app = express()
 app.use(express.json());
@@ -47,8 +51,8 @@ app.use('/tokens', tokensRouter)
 app.use('/blangym', blangymRouter);
 app.use('/email', emailsRouter);
 const options = {
-  key: fs.readFileSync('./pems/apikey.pem'),
-  cert: fs.readFileSync('./pems/apicert.pem')
+  key: c_key,
+  cert: c_cert
 };
 
 
