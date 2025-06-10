@@ -15,9 +15,9 @@ export class usersController {
     const { userName } = req.body;
     const { userPassword } = req.body;
     const user = await userModel.getUser( { userName,  userPassword } )
-    if(user.ok !==true){ return user }
+    if(user.ok !==true){ res.json(user); return}
     const cookie = await cookiesModel.setCookie( { userNameCookie: userName } )
-    if(cookie.ok !== true){ return cookie }
+    if(cookie.ok !== true){ res.json(cookie); return}
     res.json(cookie)
     }
 
