@@ -5,7 +5,7 @@ import sgMail from "@sendgrid/mail";
 
 import { emailModel } from './emailsModel.mjs';
 
-import { pool } from '../../configConecctionDB.mjs';
+import { pool } from '../../serverSettings.mjs';
 dotenv.config();
 
 let conection;

@@ -3,9 +3,12 @@ import dotenv from 'dotenv';
 import sgMail from "@sendgrid/mail";
 
 dotenv.config();
-
-
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const privateEmail = process.env.PERSONAL_EMAIL;
+console.log(privateEmail)
+
+
+
 
 
 export class emailsSender { 
@@ -58,3 +61,32 @@ export class emailsSender {
  }
 
 };
+
+export class emailManagerNotification{
+  static async ipBlockNotification({ip}){
+  const msg = {
+   to: privateEmail,
+   from: 'blanzy@blanzynetwork.com',
+   subject: 'New ip address blocked',
+   text: `The ip address ${ip} was block`,
+   html: `<h1 style="color:blue;">The ip address ${ip} was block.</h1>`,
+ }
+ try{
+  const [response] = await sgMail.send(msg);
+  if(response.statusCode === 202){
+   return { message: "Email has been sent", ok: true}
+  }
+  else{
+   return { message: "Error sending email", errorCode: 600, ok: false}
+  }
+  console.log("Email has been send: ", response)
+ }catch(err){
+  
+  console.error("Error sendinn email: ", err)
+  return { message: "Error sending email", errorCode: 601, ok: false} 
+ }
+  }
+}
+
+
+

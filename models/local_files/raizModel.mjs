@@ -1,4 +1,4 @@
-import raizMessage from '../../users/raizMessage.json'  assert { type: 'json' };
+import raizMessage from '../../users/raizMessage.json' with { type: 'json' };
 
 export class wellcomeModel{
  static async wellcome () {

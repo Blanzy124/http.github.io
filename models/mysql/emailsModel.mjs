@@ -4,7 +4,7 @@ import sgMail from "@sendgrid/mail";
 
 import { emailsSender } from '../../notificationsStructure/emailSendStructure.mjs';
 
-import { pool } from '../../configConecctionDB.mjs';
+import { pool } from '../../serverSettings.mjs';
 let conection;
 async function verifyConection(retryCount = 3) {
    try {

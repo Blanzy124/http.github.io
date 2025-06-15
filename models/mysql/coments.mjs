@@ -1,7 +1,7 @@
 import express from 'express';
 import crypto from 'node:crypto';
 import mysql from 'mysql2/promise'; 
-import { pool } from '../../configConecctionDB.mjs';
+import { pool } from '../../serverSettings.mjs';
 import { measureMemory } from 'node:vm';
 let conection;
 async function verifyConection(retryCount = 3) {

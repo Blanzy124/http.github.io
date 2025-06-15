@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'; 
-import { pool } from '../../configConecctionDB.mjs';
+import { pool } from '../../serverSettings.mjs';
 import { userModel } from './usersModel.mjs';
 import { emailModel } from './emailsModel.mjs';
 import { date } from 'zod';
