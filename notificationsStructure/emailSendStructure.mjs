@@ -5,7 +5,6 @@ import sgMail from "@sendgrid/mail";
 dotenv.config();
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const privateEmail = process.env.PERSONAL_EMAIL;
-console.log(privateEmail)
 
 
 
@@ -79,7 +78,6 @@ export class emailManagerNotification{
   else{
    return { message: "Error sending email", errorCode: 600, ok: false}
   }
-  console.log("Email has been send: ", response)
  }catch(err){
   
   console.error("Error sendinn email: ", err)
