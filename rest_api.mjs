@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import https from 'https';
-import fs from 'node:fs';
 import cookieParser from 'cookie-parser';
 //import { corsMiddleware } from './midleware/cors.mjs';
 import { comentsRouter } from './routers/comentsRouter.mjs';
@@ -14,13 +13,14 @@ import { tokensRouter } from './routers/tokensRouter.mjs';
 import { tokens } from './secure/JWTs.mjs';
 import { WebSokeckE } from './webSokeck/wstest.mjs';
 import { chatRouter } from './webSokeck/routers/chatRauter.mjs';
+import { PORT } from './serverSettings.mjs';
+import { defense } from './secure/atacks.mjs';
 
 import { WebSocketServer, WebSocket } from 'ws';
 
 dotenv.config();
 const c_cert = process.env.CLOUDFLARE_CERT;
 const c_key = process.env.CLOUDFLARE_KEY;
-
 
 
 const app = express()
@@ -35,13 +35,24 @@ app.use((req, res, next) => {
   }
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
 
   if (req.method === 'OPTIONS') {
   return res.sendStatus(200);
   }
   next();
 });
+app.use( async (req, res, next) => {
+  const ipAutorization = await defense.ip_filter({ ip: req.ip})
+  if(ipAutorization.ok != true){
+    res.status(401).json(ipAutorization)
+  }
+  else{
+    next()
+  }
+
+});
+
 
 app.use('/', raizRouter);
 app.use('/coments', comentsRouter);
@@ -68,11 +79,7 @@ wss.on("connection", async (ws, req) => {
   }catch(err){
     ws.close()
   }
-  
-
-
   WebSokeckE.foo(ws, wss, wsV);
-
 })
 server.on('upgrade', function upgrade(req, socked, head) {
   socked.on('error', console.error)
@@ -80,12 +87,7 @@ server.on('upgrade', function upgrade(req, socked, head) {
 })
 
 
-const PORT = 8443;
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Servidor API HTTPS corriendo en todas las interfaces y https://localhost:${PORT}`);
+  console.log(`Server running at https://localhost:${PORT}`);
 });
-
-//app.listen(PORT, '0.0.0.0', () => {
-// console.log(`escuchando a http://localhost:${PORT}`)
-//})
