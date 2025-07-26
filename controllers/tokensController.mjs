@@ -15,8 +15,6 @@ export class tokensController{
   if(userStatus.ok !== true){ res.json(userStatus); return; }
 
   const JWTr = tokens.JWTgeneration({ jti: cookieId, userName: userName.data.userName, userStatus: userStatus.data.userStatus })
-  if(JWTr.ok ==+ false){ res.json(JWTr); return;}
-
   res.json(JWTr)
  } 
 }
