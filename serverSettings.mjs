@@ -7,7 +7,7 @@ export const PORT = 8443;
 export const pool = mysql.createPool({
   host: "localhost",      
   user: "root",           
-  password: dbPassword,  
+  password: "",  
   database: "comentsDB",  
   port: 3306,             
   waitForConnections: true,
