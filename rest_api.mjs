@@ -74,6 +74,7 @@ wss.on("connection", async (ws, req) => {
   const wsV = await tokens.JWTverifyWS(req);// THIS IS LIKE A GET FUNTION, RETURN A DATA OBJECT
   if(wsV.ok !== true){ ws.send(wsV.message); ws.close();}
   try{
+    console.log("wsv:  ", wsV);
     ws.userName = wsV.data.userName
     ws.userStatus = wsV.data.userStatus
   }catch(err){
